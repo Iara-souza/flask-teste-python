@@ -1,9 +1,19 @@
+#python -m venv venv
+#.\venv\Scripts\activate
+#pip install flask
+# pip install python-dotenv
+#pip freeze > requirements.txt
+#pip install -r requirements.txt
 from flask import Flask, render_template, request
-app = Flask (__name__)
+
+
+app = Flask(__name__)
+
 
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 @app.route('/cardapio')
 def cardapio():
@@ -27,5 +37,44 @@ def cardapio():
     return render_template("cardapio.html", pizzas=pizzas)
 
 
-if __name__=='__main__':
+
+
+@app.route('/avaliacoes')
+def avaliacoes():
+    avaliacoes = [
+        {"cliente": "Iara", "comentario": "Adorei os sabores!"},
+        {"cliente": "Maria", "comentario": "Atendimento excelente!"},
+        {"cliente": "José", "comentario": "A melhor que está tendooo!"}
+    ]
+    return render_template("avaliacoes.html", avaliacoes=avaliacoes)
+
+
+
+
+@app.route('/faleconosco', methods=['GET', 'POST'])
+def faleconosco():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        mensagem = request.form.get('mensagem')
+        return f"Obrigado, {nome}!"
+    return render_template("faleconosco.html")
+
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = request.form.get('usuario')
+        senha = request.form.get('senha')
+        if usuario == "admin" and senha == "1234":
+            return "Login realizado!"
+        return "Usuário ou senha inválidos!"
+    return render_template("login.html")
+
+
+if __name__ == '__main__':
     app.run()
+
+
